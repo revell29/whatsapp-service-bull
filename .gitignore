@@ -1,0 +1,5 @@
+node_modules
+session.json
+temp
+last.qr
+.env
