@@ -34,6 +34,7 @@
     "nodemon": "^2.0.7",
     "request": "^2.88.2",
     "shelljs": "^0.8.4",
+    "uuid": "^8.3.2",
     "valid-url": "^1.0.9",
     "whatsapp-web.js": "^1.12.6"
   },

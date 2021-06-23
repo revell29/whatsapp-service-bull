@@ -16,6 +16,7 @@ class MessageController {
     try {
       const { phone, image, caption } = req.body;
 
+      console.log(req.body);
       if (phone == undefined || image == undefined) {
         return res.status(400).send({
           status: "error",
@@ -31,7 +32,9 @@ class MessageController {
         await fs.mkdirSync("./temp");
       }
 
-      const path = "./temp/" + image.split("/").slice(-1)[0];
+      const newImage = helpers.generateNewImage(image);
+
+      const path = "./temp/" + newImage;
 
       // Download media and run queue send message media
       helpers.mediadownloader(image, path, async () => {
