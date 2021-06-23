@@ -20,8 +20,12 @@ export const sendMessageMedia = async (job) => {
 
 export const sendTextMessage = async (job) => {
   return new Promise(async (resolve, reject) => {
-    const { phone, message } = job;
-    return await client.sendMessage(phone + "@c.us", message);
+      const { phone, message } = job;
+      client.sendMessage(phone + "@c.us", message).then(res => {
+          return resolve(res);
+      }).catch(err => {
+        reject(err); 
+      })
   });
 };
 

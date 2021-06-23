@@ -38,7 +38,7 @@ export const QueueMessageMedia = async (data) => {
   queueSendMedia.add(data, {
     attempts: 3,
     delay: 3000,
-    timeoute: 10000,
+    timeout: 10000,
   });
 };
 
@@ -46,7 +46,7 @@ export const QueueMessageText = async (data) => {
   queueSendText.add(data, {
     attempts: 3,
     delay: 3000,
-    timeoute: 100000,
+    timeout: 100000,
   });
 };
 
