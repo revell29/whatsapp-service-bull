@@ -1,4 +1,5 @@
 node_modules
+build
 session.json
 temp
 last.qr

@@ -1,13 +1,12 @@
 import { setQueues, BullAdapter } from "bull-board";
-import { sendMessageMedia } from "./queueProcess";
+import { sendMessageMedia, sendTextMessage } from "./queueProcess";
 import { redisStore } from "../../lib/redisQueue";
 import Bull from "bull";
 
-const queue = new Bull("send-message-wa", redisStore);
+const queueSendMedia = new Bull("send-media-message", redisStore);
+const queueSendText = new Bull("send-text-message", redisStore);
 
-// setQueues([new BullAdapter(queue)]);
-
-queue.process(async (job) => {
+queueSendMedia.process(async (job) => {
   try {
     const mess = await sendMessageMedia(job.data);
     return Promise.resolve(mess);
@@ -16,16 +15,32 @@ queue.process(async (job) => {
   }
 });
 
-queue.on("completed", (job, result) => {
+queueSendMedia.on("completed", (job, result) => {
   console.log(`Job completed with result ${result}`);
 });
 
-export const sendMessage = async (data) => {
-  queue.add(data, {
-    attempt: 3,
+queueSendText.process(async (job) => {
+  try {
+    const res = await sendTextMessage(job.data);
+    return Promise.resolve(res);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+});
+
+export const QueueMessageMedia = async (data) => {
+  queueSendMedia.add(data, {
+    attempts: 3,
+  });
+};
+
+export const QueueMessageText = async (data) => {
+  queueSendText.add(data, {
+    attempts: 3,
   });
 };
 
 export default {
-  sendMessage,
+  QueueMessageMedia,
+  QueueMessageText,
 };

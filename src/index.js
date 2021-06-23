@@ -2,7 +2,7 @@ import express from "express";
 import fs from "fs";
 import axios from "axios";
 
-import chatModule from "./modules/message";
+import routesApi from "./modules";
 import authModule from "./modules/auth";
 
 const bodyParser = require("body-parser");
@@ -54,10 +54,8 @@ client.on("authenticated", (session) => {
     authed = true;
   });
 
-  try {
+  if (fs.existsSync("./last.qr")) {
     fs.unlinkSync("./last.qr");
-  } catch (err) {
-    console.log(err);
   }
 });
 
@@ -71,13 +69,11 @@ client.on("ready", () => {
   console.log("Client is ready!");
 });
 
-client.on("message_ack", (msg, ack) => {
-  if (msg.ack === MessageAck.ACK_DEVICE) {
-    console.log("terkirim");
-  }
-
-  console.log(msg);
-});
+// client.on("message_ack", (msg, ack) => {
+//   if (msg.ack === MessageAck.ACK_DEVICE) {
+//     console.log("terkirim");
+//   }
+// });
 
 client.on("message", (msg) => {
   if (config.webhook.enabled) {
@@ -86,13 +82,13 @@ client.on("message", (msg) => {
 });
 client.initialize();
 
-app.use(function (req, res, next) {
-  console.log(req.method + " : " + req.path);
-  next();
-});
-
-app.use("/chat", chatModule);
 app.use("/auth", authModule);
+app.use("/api", routesApi);
+app.use("/*", (req, res) => {
+  res.send({
+    message: "Not found!",
+  });
+});
 
 app.listen(port, () => {
   console.log("Server Running Live on Port : " + port);

@@ -3,7 +3,6 @@ import Vuri from "valid-url";
 import fs from "fs";
 import * as helpers from "../../lib/helpers";
 import * as messageQueue from "./queue";
-import Promise from "bluebird";
 
 class MessageController {
   /**
@@ -32,10 +31,12 @@ class MessageController {
         await fs.mkdirSync("./temp");
       }
 
-      var path = "./temp/" + image.split("/").slice(-1)[0];
+      const path = "./temp/" + image.split("/").slice(-1)[0];
+
+      // Download media and run queue send message media
       helpers.mediadownloader(image, path, async () => {
-        await messageQueue.sendMessage({
-          phone: phone,
+        await messageQueue.QueueMessageMedia({
+          phone: helpers.phoneNumberFormatter(phone),
           caption: caption,
           path: path,
         });
@@ -58,7 +59,11 @@ class MessageController {
         });
       }
 
-      const res = await client.sendMessage(phone + "@c.us", message);
+      // RUN QUEUE SEND MESSAGE TEXT
+      await messageQueue.QueueMessageText({
+        phone: helpers.phoneNumberFormatter(phone),
+        message,
+      });
 
       return res.status(200).send({
         status: "success",

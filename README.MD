@@ -16,7 +16,8 @@ Provide API to send message text or with image in background process.
 - run `npm install`
 - run `npm run start` to run locally
 
-| Endpoint                   | Description      |
-| -------------------------- | ---------------- |
-| `POST: /chat/sendmessage/` | Sendding message |
-| `POST: /chat/sendimage`    | Sending image    |
+| Endpoint                        | Description              |
+| ------------------------------- | ------------------------ |
+| `POST: /api/chats/sendmessage/` | Sendding message         |
+| `POST: /api/chats/sendimage`    | Sending image            |
+| `GET: /auth/getqr`              | Generate Qrcode for scan |
