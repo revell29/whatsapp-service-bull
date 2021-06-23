@@ -18,7 +18,7 @@ if (fs.existsSync(SESSION_FILE_PATH)) {
 process.title = "whatsapp-node-api";
 global.client = new Client({
   puppeteer: {
-    headless: false,
+    headless: true,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
