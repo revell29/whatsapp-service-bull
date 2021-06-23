@@ -16,14 +16,20 @@ queueSendMedia.process(async (job) => {
 });
 
 queueSendMedia.on("completed", (job, result) => {
-  console.log(`Job completed with result ${result}`);
+  console.log(`Job completed send media`);
+});
+
+queueSendText.on("completed", (job, result) => {
+  console.log(`Job completed send text`);
 });
 
 queueSendText.process(async (job) => {
   try {
     const res = await sendTextMessage(job.data);
+    console.log(res);
     return Promise.resolve(res);
   } catch (err) {
+    console.log(res);
     return Promise.reject(err);
   }
 });
